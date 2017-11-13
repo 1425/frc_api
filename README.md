@@ -2,6 +2,8 @@ This is a program to access the FRC (FIRST robotics competition) events API.  Se
 
 This follows a similar style to an interface to The Blue Alliance's API implemented here: https://github.com/1425/tba
 
+Note that the FRC events API requires being given a key before it will allow access; without that this program is not very useful.  Note that they do continue to give out the keys although the process is not instantaneous.  If you're in a hurry and the same data is available, you may be better off using the API of The Blue Alliance.
+
 # PREREQUISITES
   * libcurl; tested with version 7.47.0
   * sqlite; tested with version 3.11.0
