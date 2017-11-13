@@ -4,11 +4,9 @@ LIBS = -lcurl -lsqlite3
 
 all: fetch
 
-query: data.o
-
 fetch: curl.o query.o data.o fetch.o db.o rapidjson.o util.o
 	$(CXX) $^ $(LIBS) -o $@
 
 .PHONY:clean
 clean:
-	rm -f query *.o fetch
+	rm -f *.o fetch

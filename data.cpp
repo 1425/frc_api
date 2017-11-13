@@ -4,6 +4,8 @@
 #include "util.h"
 #include "rapidjson.h"
 
+#define nyi FRC_API_NYI
+
 namespace frc_api{
 
 std::ostream& operator<<(std::ostream&,R0_2)nyi

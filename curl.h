@@ -1,5 +1,5 @@
-#ifndef TBA_CURL_H
-#define TBA_CURL_H
+#ifndef FRC_API_CURL_H
+#define FRC_API_CURL_H
 
 #include<string>
 #include<map>

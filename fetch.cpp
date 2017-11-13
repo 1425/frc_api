@@ -132,14 +132,14 @@ int main1(){
 
 	{
 		auto g=run(f,API_index{});
-		PRINT(g);
+		FRC_API_PRINT(g);
 	}
 
 	std::vector<Season> years{Season{2015},Season{2016},Season{2017},Season{2018}};
 	std::set<Team_number> teams;
 
 	for(auto year:years){
-		PRINT(year);
+		FRC_API_PRINT(year);
 		auto g=run(f,Event_listings{year,Event_criteria{}});
 		/*auto g=run(
 			f,
@@ -226,10 +226,10 @@ int main(){
 	try{
 		return main1();
 	}catch(Decode_error e){
-		PRINT(e);
+		FRC_API_PRINT(e);
 		return 1;
 	}catch(std::runtime_error const& e){
-		PRINT(e);
+		FRC_API_PRINT(e);
 		return 1;
 	}
 }

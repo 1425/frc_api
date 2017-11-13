@@ -8,25 +8,25 @@
 #include "util.h"
 #include "rapidjson.h"
 
-//using namespace std;
+#define nyi FRC_API_NYI
 
 namespace frc_api{
 
 //generic stuff
 
-std::ostream& operator<<(std::ostream&,std::any)nyi
-std::any example(const std::any*)nyi
-std::any rand(const std::any*)nyi
-bool operator<(std::any,std::any)nyi
-std::any decode(JSON const&,const std::any*)nyi
+std::ostream& operator<<(std::ostream&,std::any)FRC_API_NYI
+std::any example(const std::any*)FRC_API_NYI
+std::any rand(const std::any*)FRC_API_NYI
+bool operator<(std::any,std::any)FRC_API_NYI
+std::any decode(JSON const&,const std::any*)FRC_API_NYI
 
 bool example(const bool*){ return 0; }
 
 unsigned example(const unsigned*){ return 0; }
-unsigned rand(const unsigned*)nyi
+unsigned rand(const unsigned*)FRC_API_NYI
 
 double example(const double*){ return 0; }
-double rand(const double*)nyi
+double rand(const double*)FRC_API_NYI
 
 //start normal program logic
 
@@ -53,7 +53,7 @@ std::ostream& operator<<(std::ostream& o,Season a){
 Season example(const Season*){ return Season{2015}; }
 Season rand(const Season*){ return Season{2015+::rand()%3}; }
 
-Season decode(JSON const&,const Season*)nyi
+Season decode(JSON const&,const Season*)FRC_API_NYI
 
 bool rand(const bool*){ return ::rand()%2; }
 
@@ -113,7 +113,7 @@ Match_number example(const Match_number*){
 }
 
 Match_number decode(JSON const&,const Match_number*){
-	nyi
+	FRC_API_NYI
 }
 
 int example(const int*){ return 0; }
@@ -494,11 +494,11 @@ int main(){
 		}else{
 			since_new=0;
 			seen|=v;
-			PRINT(v);
+			FRC_API_PRINT(v);
 			auto u=url(v);
 			//check that all of the generated urls are unique!
 			if(urls.count(u)){
-				PRINT(u);
+				FRC_API_PRINT(u);
 			}
 			assert(urls.count(u)==0);
 			urls|=u;

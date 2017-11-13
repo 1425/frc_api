@@ -11,9 +11,8 @@
 
 namespace frc_api{
 
-#define nyi { std::cout<<"nyi "<<__FILE__<<":"<<__LINE__<<"\n"; exit(44); }
-#define FRC_API_NYI nyi
-#define PRINT(X) std::cout<<""#X<<":"<<(X)<<"\n";
+#define FRC_API_NYI { std::cout<<"nyi "<<__FILE__<<":"<<__LINE__<<"\n"; exit(44); }
+#define FRC_API_PRINT(X) std::cout<<""#X<<":"<<(X)<<"\n";
 
 template<typename A,typename B>
 std::ostream& operator<<(std::ostream& o,std::pair<A,B> const& p){
