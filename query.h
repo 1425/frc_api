@@ -176,7 +176,7 @@ FRC_API_DATA(Registrations_query,FRC_API_REGISTRATIONS_QUERY)
 	X(Alliance_selection,std::optional<Alliances>)\
 	X(API_index,ApiIndex)\
 	X(Event_awards,std::optional<Award>)\
-	X(Award_listings,AwardListings)\
+	X(Award_listings,std::optional<AwardListings>)\
 	X(Match_results,std::optional<Matches>)\
 	X(Score_details,std::optional<MatchScores>)\
 	X(Event_rankings,std::optional<Rankings>)\

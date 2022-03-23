@@ -31,7 +31,7 @@ double rand(const double*)FRC_API_NYI
 //start normal program logic
 
 Season::Season(int i1):i(i1){
-	if(i<2015 || i>2018){
+	if(i<2015 || i>2022){
 		throw std::invalid_argument("Season");
 	}
 }
@@ -259,6 +259,10 @@ IMPL(Response_details_2016,FRC_API_RESPONSE_DETAILS_2016)
 IMPL(Score_2017,FRC_API_SCORE_2017)
 IMPL(Score_2016,FRC_API_SCORE_2016)
 IMPL(Response_details_2017,FRC_API_RESPONSE_DETAILS_2017)
+IMPL(Score_2018,FRC_API_SCORE_2018)
+IMPL(Response_details_2018,FRC_API_RESPONSE_DETAILS_2018)
+IMPL(Score_2022,FRC_API_SCORE_2022)
+IMPL(Response_details_2022,FRC_API_RESPONSE_DETAILS_2022)
 IMPL(Rankings,FRC_API_RANKINGS)
 
 URL url(Alliance_selection const& a){

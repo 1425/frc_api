@@ -8,6 +8,7 @@
 #include<map>
 #include<vector>
 #include<iterator>
+#include<optional>
 
 namespace frc_api{
 

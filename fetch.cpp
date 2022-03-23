@@ -1,3 +1,4 @@
+#include<fstream>
 #include "query.h"
 #include "curl.h"
 #include "util.h"
@@ -6,6 +7,11 @@
 
 using namespace frc_api;
 //using namespace std;
+
+template<typename T>
+std::vector<T> take(size_t n,std::vector<T> const& v){
+	return std::vector<T>{v.begin(),v.begin()+std::min(n,v.size())};
+}
 
 template<typename T>
 std::set<T>& operator|=(std::set<T> &a,std::vector<T> const& in){
@@ -111,18 +117,15 @@ template<typename T>
 auto code(T t){ return t.code; }
 
 int main1(){
-	//auto u=url(example((Alliance_selection*)nullptr));
-	/*PRINT(u);
-	vector<string> headers{
-		//"Authorization: Basic\r\neric1425:3B673469-9F11-4F4F-A209-EAB2BB6DE9AB",
-		"Authorization: Basic ZXJpYzE0MjU6M0I2NzM0NjktOUYxMS00RjRGLUEyMDktRUFCMkJCNkRFOUFCCg==",
-		"Accept: application/json"
-	};
-	auto g=get_url(u,headers);*/
-	Nonempty_string key{"ZXJpYzE0MjU6M0I2NzM0NjktOUYxMS00RjRGLUEyMDktRUFCMkJCNkRFOUFCCg=="};
-	Cached_fetcher f{Fetcher{key},Cache{}};
-	auto u=url(Alliance_selection{Season{2015},Event_code{"orwil"}});
-	//run(f,u,(Alliances*)nullptr);
+	std::string key;
+	{
+		std::ifstream f("api_key");
+		getline(f,key);
+	}
+
+	Cached_fetcher f{Fetcher{Nonempty_string{key}},Cache{}};
+	auto u=url(Alliance_selection{Season{2022},Event_code{"orwil"}});
+	run(f,u,(Alliances*)nullptr);
 	//run1(f,Alliance_selection{Season{2015},Event_code{"orwil"}});
 
 	/*for(auto q:Query_generator()){
@@ -135,7 +138,13 @@ int main1(){
 		FRC_API_PRINT(g);
 	}
 
-	std::vector<Season> years{Season{2015},Season{2016},Season{2017},Season{2018}};
+	std::vector<Season> years{
+		Season{2015},
+		Season{2016},
+		Season{2017},
+		Season{2018},
+		Season{2022},
+	};
 	std::set<Team_number> teams;
 
 	for(auto year:years){
@@ -150,10 +159,17 @@ int main1(){
 		);*/
 		//PRINT(g);
 		auto event_codes=MAP(code,g.Events);
-		//PRINT(event_codes);
-		for(auto event_code:event_codes){
+		FRC_API_PRINT(event_codes);
+		FRC_API_PRINT(event_codes.size());
+		for(auto event_code:take(2000,event_codes)){
 			//PRINT(event_code);
-			run(f,Alliance_selection{year,event_code});
+			try{
+				run(f,Alliance_selection{year,event_code});
+			}catch(Decode_error){
+				std::cout<<"Failed on "<<event_code<<"\n";
+				//FRC_API_PRINT(event_code);
+				continue;
+			}
 
 			auto d=run(f,Event_awards{year,event_code});
 			//PRINT(d);
@@ -173,8 +189,12 @@ int main1(){
 				//PRINT(g);
 			}
 
-			auto g2=run(f,Event_schedule{year,event_code,Tournament_level::Qualification,{},{}});
-			//PRINT(g2);
+			try{
+				auto g2=run(f,Event_schedule{year,event_code,Tournament_level::Qualification,{},{}});
+				//PRINT(g2);
+			}catch(Decode_error const& a){
+				FRC_API_PRINT(a);
+			}
 
 			auto g3=run(f,Hybrid_schedule{year,event_code,Tournament_level::Qualification,{},{}});
 			//PRINT(g3);
@@ -230,6 +250,9 @@ int main(){
 		return 1;
 	}catch(std::runtime_error const& e){
 		FRC_API_PRINT(e);
+		return 1;
+	}catch(std::invalid_argument const& e){
+		std::cout<<"invalid_argument:"<<e.what()<<"\n";
 		return 1;
 	}
 }

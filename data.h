@@ -86,8 +86,14 @@ FRC_API_DATA(Alliances,FRC_API_ALLIANCES)
 
 #define FRC_API_APIINDEX(X)\
 	X(std::string,name)\
-	X(std::string,version)\
-	X(std::string,status)
+	X(std::string,apiVersion)\
+	X(std::string,status)\
+	X(std::string,serviceManifestName)\
+	X(std::string,serviceManifestVersion)\
+	X(std::string,codePackageName)\
+	X(std::string,codePackageVersion)\
+	X(int,currentSeason)\
+	X(int,maxSeason)
 
 FRC_API_DATA(ApiIndex,FRC_API_APIINDEX)
 
@@ -173,7 +179,9 @@ FRC_API_DATA(Match_Team,FRC_API_MATCH_TEAM)
 	X(int,scoreBlueFinal)\
 	X(int,scoreBlueFoul)\
 	X(int,scoreBlueAuto)\
-	X(std::vector<Match_Team>,Teams)
+	X(std::vector<Match_Team>,teams)\
+	X(std::string,level)\
+	X(std::string,autoStartTime)
 
 FRC_API_DATA(Match,FRC_API_MATCH)
 
@@ -238,7 +246,7 @@ FRC_API_DATA(Score_2017,FRC_API_SCORE_2017)
 #define FRC_API_RESPONSE_DETAILS_2017(X)\
 	X(std::string,matchLevel)\
 	X(int,matchNumber)\
-	X(std::vector<Score_2017>,Alliances)
+	X(std::vector<Score_2017>,alliances)
 
 FRC_API_DATA(Response_details_2017,FRC_API_RESPONSE_DETAILS_2017)
 
@@ -314,8 +322,8 @@ FRC_API_DATA(Score_2016,FRC_API_SCORE_2016)
 #define FRC_API_RESPONSE_DETAILS_2016(X)\
 	X(std::string,matchLevel)\
 	X(int,matchNumber)\
-	X(std::string,AudienceGroup)\
-	X(std::vector<Score_2016>,Alliances)
+	X(std::optional<std::string>,audienceGroup)\
+	X(std::vector<Score_2016>,alliances)
 
 //	X(std::vector<Alliance>,Alliances)
 
@@ -361,12 +369,120 @@ FRC_API_DATA(Score_2015,FRC_API_SCORE_2015)
 	X(int,matchNumber)\
 	X(Coopertition,coopertition)\
 	X(int,coopertitionPoints)\
-	X(std::vector<Score_2015>,Alliances)
+	X(std::vector<Score_2015>,alliances)
 
 FRC_API_DATA(Response_details_2015,FRC_API_RESPONSE_DETAILS_2015)
 
-using MatchScore=std::variant<Response_details_2015,Response_details_2016,Response_details_2017>;
-//using MatchScore=std::variant<Response_details_2015,Response_details_2016>;
+#define FRC_API_SCORE_2018(X)\
+	X(std::string,alliance)\
+	X(std::string,autoRobot1)\
+	X(std::string,autoRobot2)\
+	X(std::string,autoRobot3)\
+	X(int,autoSwitchOwnershipSec)\
+	X(int,autoScaleOwnershipSec)\
+	X(bool,autoSwitchAtZero)\
+	X(int,autoRunPoints)\
+	X(int,autoOwnershipPoints)\
+	X(int,autoPoints)\
+	X(int,teleopSwitchOwnershipSec)\
+	X(int,teleopScaleOwnershipSec)\
+	X(int,teleopSwitchBoostSec)\
+	X(int,teleopSwitchForceSec)\
+	X(int,teleopScaleForceSec)\
+	X(int,teleopScaleBoostSec)\
+	X(int,vaultForceTotal)\
+	X(int,vaultForcePlayed)\
+	X(int,vaultLevitateTotal)\
+	X(int,vaultLevitatePlayed)\
+	X(int,vaultBoostTotal)\
+	X(int,vaultBoostPlayed)\
+	X(std::string,endgameRobot1)\
+	X(std::string,endgameRobot2)\
+	X(std::string,endgameRobot3)\
+	X(int,teleopPoints)\
+	X(int,teleopOwnershipPoints)\
+	X(int,vaultPoints)\
+	X(int,endgamePoints)\
+	X(bool,autoQuestRankingPoint)\
+	X(bool,faceTheBossRankingPoint)\
+	X(int,foulCount)\
+	X(int,techFoulCount)\
+	X(int,adjustPoints)\
+	X(int,foulPoints)\
+	X(int,rp)\
+	X(int,totalPoints)
+
+FRC_API_DATA(Score_2018,FRC_API_SCORE_2018)
+
+#define FRC_API_RESPONSE_DETAILS_2018(X)\
+	X(std::string,matchLevel)\
+	X(int,matchNumber)\
+	X(std::string,switchLeftNearColor)\
+	X(std::string,switchRightNearColor)\
+	X(std::string,scaleNearColor)\
+	X(std::vector<Score_2018>,alliances)
+
+FRC_API_DATA(Response_details_2018,FRC_API_RESPONSE_DETAILS_2018)
+
+#define FRC_API_SCORE_2022(X)\
+	X(std::string,alliance)\
+	X(std::string,taxiRobot1)\
+	X(std::string,endgameRobot1)\
+	X(std::string,taxiRobot2)\
+	X(std::string,endgameRobot2)\
+	X(std::string,taxiRobot3)\
+	X(std::string,endgameRobot3)\
+	X(int,autoCargoLowerNear)\
+	X(int,autoCargoLowerFar)\
+	X(int,autoCargoLowerBlue)\
+	X(int,autoCargoLowerRed)\
+	X(int,autoCargoUpperNear)\
+	X(int,autoCargoUpperFar)\
+	X(int,autoCargoUpperBlue)\
+	X(int,autoCargoUpperRed)\
+	X(int,autoCargoTotal)\
+	X(int,teleopCargoLowerNear)\
+	X(int,teleopCargoLowerFar)\
+	X(int,teleopCargoLowerBlue)\
+	X(int,teleopCargoLowerRed)\
+	X(int,teleopCargoUpperNear)\
+	X(int,teleopCargoUpperFar)\
+	X(int,teleopCargoUpperBlue)\
+	X(int,teleopCargoUpperRed)\
+	X(int,teleopCargoTotal)\
+	X(int,matchCargoTotal)\
+	X(int,autoTaxiPoints)\
+	X(int,autoPoints)\
+	X(int,autoCargoPoints)\
+	X(bool,quintetAchieved)\
+	X(int,teleopPoints)\
+	X(int,teleopCargoPoints)\
+	X(int,endgamePoints)\
+	X(bool,cargoBonusRankingPoint)\
+	X(bool,hangarBonusRankingPoint)\
+	X(int,foulCount)\
+	X(int,techFoulCount)\
+	X(int,adjustPoints)\
+	X(int,foulPoints)\
+	X(int,rp)\
+	X(int,totalPoints)
+
+FRC_API_DATA(Score_2022,FRC_API_SCORE_2022)
+
+#define FRC_API_RESPONSE_DETAILS_2022(X)\
+	X(std::string,matchLevel)\
+	X(int,matchNumber)\
+	X(std::vector<Score_2022>,alliances)
+
+FRC_API_DATA(Response_details_2022,FRC_API_RESPONSE_DETAILS_2022)
+
+using MatchScore=std::variant<
+	Response_details_2015,
+	Response_details_2016,
+	Response_details_2017,
+	Response_details_2018,
+	Response_details_2022
+>;
 
 #define FRC_API_MATCHSCORES(X)\
 	X(std::vector<MatchScore>,MatchScores)
@@ -413,7 +529,8 @@ FRC_API_DATA(ScheduledMatch_Team,FRC_API_SCHEDULEDMATCH_TEAM)
 	X(Tournament_level,tournamentLevel)\
 	X(int,matchNumber)\
 	X(Time,startTime)\
-	X(std::vector<ScheduledMatch_Team>,Teams)
+	X(std::vector<ScheduledMatch_Team>,teams)\
+	X(std::optional<std::string>,level)
 
 FRC_API_DATA(ScheduledMatch,FRC_API_SCHEDULEDMATCH)
 
@@ -433,6 +550,7 @@ FRC_API_DATA(HybridSchedule_Team,FRC_API_HYBRIDSCHEDULE_TEAM)
 #define FRC_API_HYBRIDSCHEDULE(X)\
 	X(std::optional<Time>,actualStartTime)\
 	X(std::string,description)\
+	X(std::optional<std::string>,level)\
 	X(int,matchNumber)\
 	X(std::optional<Time>,postResultTime)\
 	X(std::optional<unsigned>,scoreRedFinal)\
@@ -443,7 +561,7 @@ FRC_API_DATA(HybridSchedule_Team,FRC_API_HYBRIDSCHEDULE_TEAM)
 	X(std::optional<unsigned>,scoreBlueAuto)\
 	X(Time,startTime)\
 	X(Tournament_level,tournamentLevel)\
-	X(std::vector<HybridSchedule_Team>,Teams)
+	X(std::vector<HybridSchedule_Team>,teams)
 
 FRC_API_DATA(HybridSchedule,FRC_API_HYBRIDSCHEDULE)
 
@@ -467,7 +585,8 @@ FRC_API_DATA(FRCChampionship,FRC_API_FRCCHAMPIONSHIP)
 	X(Time,kickoff)\
 	X(Team_number,rookieStart)\
 	X(unsigned,teamCount)\
-	X(std::vector<FRCChampionship>,FRCChampionships)
+	X(std::vector<FRCChampionship>,frcChampionships)\
+	X(std::optional<std::string>,frcChampionship)
 
 FRC_API_DATA(Season_info,FRC_API_SEASON)
 
@@ -481,7 +600,9 @@ FRC_API_DATA(Season_info,FRC_API_SEASON)
 	X(ChampionshipDivision)\
 	X(Championship)\
 	X(OffSeason)\
-	X(OffSeasonWithAzureSync)
+	X(OffSeasonWithAzureSync)\
+	X(DistrictParent)\
+	X(RegionalParent)
 
 FRC_API_ENUM(Event_Event_type,FRC_API_EVENT_EVENT_TYPES)
 
@@ -500,6 +621,7 @@ FRC_API_ENUM(Event_Event_type,FRC_API_EVENT_EVENT_TYPES)
 	X(std::string,timezone)\
 	X(Date,dateStart)\
 	X(Date,dateEnd)\
+	X(std::vector<std::string>,webcasts)
 
 FRC_API_DATA(Event,FRC_API_EVENT)
 
@@ -553,7 +675,10 @@ FRC_API_DATA(TeamListings,FRC_API_TEAMLISTINGS)
 FRC_API_DATA(RegistrationRecord,FRC_API_REGISTRATIONRECORD)
 
 #define FRC_API_REGISTRATIONS(X)\
-	X(unsigned,count)\
+	X(unsigned,registrationCountTotal)\
+	X(unsigned,registrationCountPage)\
+	X(unsigned,pageCurrent)\
+	X(unsigned,pageTotal)\
 	X(std::vector<RegistrationRecord>,Registrations)
 
 FRC_API_DATA(Registrations,FRC_API_REGISTRATIONS)

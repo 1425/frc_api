@@ -1,4 +1,3 @@
-CXX = g++-7
 CXXFLAGS = -std=c++17 -Wall -Wextra -O2
 LIBS = -lcurl -lsqlite3
 
