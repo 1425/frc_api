@@ -16,6 +16,9 @@ class Season{
 	explicit Season(int);
 
 	int get()const;
+
+	Season& operator++();
+	auto operator<=>(Season const&)const=default;
 };
 std::ostream& operator<<(std::ostream&,Season);
 bool operator==(Season,int);
@@ -175,7 +178,7 @@ FRC_API_DATA(Registrations_query,FRC_API_REGISTRATIONS_QUERY)
 #define FRC_API_QUERY_TYPES(X)\
 	X(Alliance_selection,std::optional<Alliances>)\
 	X(API_index,ApiIndex)\
-	X(Event_awards,std::optional<Award>)\
+	X(Event_awards,Awards)\
 	X(Award_listings,std::optional<AwardListings>)\
 	X(Match_results,std::optional<Matches>)\
 	X(Score_details,std::optional<MatchScores>)\

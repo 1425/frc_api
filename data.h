@@ -98,17 +98,24 @@ FRC_API_DATA(Alliances,FRC_API_ALLIANCES)
 FRC_API_DATA(ApiIndex,FRC_API_APIINDEX)
 
 #define FRC_API_AWARD(X)\
-	X(std::any,awardId)\
-	X(std::any,teamId)\
-	X(std::any,eventId)\
-	X(std::any,eventDivisionId)\
+	X(int,awardId)\
+	X(std::optional<int>,teamId)\
+	X(std::optional<int>,eventId)\
+	X(std::optional<int>,eventDivisionId)\
 	X(std::string,name)\
 	X(int,series)\
 	X(std::optional<Team_number>,teamNumber)\
 	X(std::optional<std::string>,fullTeamName)\
 	X(std::optional<std::string>,person)\
+	X(std::string,eventCode)\
+	X(std::optional<std::string>,schoolName)
 
 FRC_API_DATA(Award,FRC_API_AWARD)\
+
+#define FRC_API_AWARDS(X)\
+	X(std::vector<Award>,Awards)
+
+FRC_API_DATA(Awards,FRC_API_AWARDS)
 
 #define FRC_API_AWARD_EVENT_TYPES(X)\
 	X(None)\
@@ -118,15 +125,12 @@ FRC_API_DATA(Award,FRC_API_AWARD)\
 	X(ChampionshipSubdivision)\
 	X(ChampionshipDivision)\
 	X(Championship)\
-	X(DistrictChampionshipDivision) //this option not documented.
+	X(DistrictChampionshipDivision)\
+	X(DistrictChampionshipWithLevels)\
+	X(Remote)\
+	X(DistrictParent)\
+	X(RegionalParent)\
 
-/*enum class Award_Event_type{
-	#define X(A) A,
-	FRC_API_AWARD_EVENT_TYPES(X)
-	#undef X
-};
-
-std::ostream& operator<<(std::ostream&,Award_Event_type);*/
 FRC_API_ENUM(Award_Event_type,FRC_API_AWARD_EVENT_TYPES)
 
 #define FRC_API_AWARD_LISTING(X)\

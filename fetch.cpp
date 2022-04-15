@@ -171,7 +171,7 @@ int main1(){
 				continue;
 			}
 
-			auto d=run(f,Event_awards{year,event_code});
+			//auto d=run(f,Event_awards{year,event_code});
 			//PRINT(d);
 
 			auto g=run(
@@ -253,6 +253,9 @@ int main(){
 		return 1;
 	}catch(std::invalid_argument const& e){
 		std::cout<<"invalid_argument:"<<e.what()<<"\n";
+		return 1;
+	}catch(frc_api::HTTP_error const& e){
+		std::cout<<e<<"\n";
 		return 1;
 	}
 }

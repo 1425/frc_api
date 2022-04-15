@@ -18,7 +18,11 @@ std::ostream& operator<<(std::ostream&,std::any)FRC_API_NYI
 std::any example(const std::any*)FRC_API_NYI
 std::any rand(const std::any*)FRC_API_NYI
 bool operator<(std::any,std::any)FRC_API_NYI
-std::any decode(JSON const&,const std::any*)FRC_API_NYI
+
+std::any decode(JSON const& a,const std::any*){
+	std::cout<<a<<"\n";
+	FRC_API_NYI
+}
 
 bool example(const bool*){ return 0; }
 
@@ -30,16 +34,22 @@ double rand(const double*)FRC_API_NYI
 
 //start normal program logic
 
+static const int MAX_YEAR=2022;
+
 Season::Season(int i1):i(i1){
-	if(i<2015 || i>2022){
+	if(i<2015 || i>MAX_YEAR){
 		throw std::invalid_argument("Season");
 	}
 }
 
 int Season::get()const{ return i; }
 
-bool operator<(Season const& a,Season const& b){
-	return a.get()<b.get();
+Season& Season::operator++(){
+	if(i==MAX_YEAR){
+		throw std::invalid_argument("Season inc");
+	}
+	i++;
+	return *this;
 }
 
 bool operator==(Season a,int i){
@@ -229,6 +239,7 @@ IMPL(Alliance_t,FRC_API_ALLIANCE)
 IMPL(Alliances,FRC_API_ALLIANCES)
 IMPL(ApiIndex,FRC_API_APIINDEX)
 IMPL(Award,FRC_API_AWARD)
+IMPL(Awards,FRC_API_AWARDS)
 IMPL(AwardListing,FRC_API_AWARD_LISTING)
 IMPL(Match,FRC_API_MATCH)
 IMPL(Match_Team,FRC_API_MATCH_TEAM)
@@ -279,13 +290,14 @@ template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
 template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
 
 URL url(Event_awards const& a){
+	//it appears that this API is broken on the other end.
 	std::ostringstream ss;
-	ss<<"https://frc-api.firstinspires.org/v2.0/"<<a.season<<"/awards/?";
+	ss<<"https://frc-api.firstinspires.org/v3.0/"<<a.season<<"/awards/";
 	std::visit(overloaded{
-			[&ss](Team_number a){ ss<<"teamNumber="<<a; },
-			[&ss](Event_code a){ ss<<"eventCode="<<a; },
+			[&ss](Team_number a){ nyi ss<<"teamNumber="<<a; },
+			[&ss](Event_code a){ ss<<"event/"<<a; },
 			[&ss](std::pair<Event_code,Team_number> p){
-				ss<<"eventCode="<<p.first<<"&teamNumber="<<p.second;
+				nyi//ss<<"eventCode="<<p.first<<"&teamNumber="<<p.second;
 			}
 		},
 		a.which
@@ -295,7 +307,7 @@ URL url(Event_awards const& a){
 
 URL url(Award_listings const& a){
 	std::ostringstream ss;
-	ss<<"https://frc-api.firstinspires.org/v2.0/"<<a.season<<"/awards/list";
+	ss<<"https://frc-api.firstinspires.org/v3.0/"<<a.season<<"/awards/list";
 	return ss.str();
 }
 
@@ -377,7 +389,8 @@ URL url(Event_rankings const& a){
 
 URL url(Event_schedule const& a){
 	URL_generator ss;
-	ss<<"https://frc-api.firstinspires.org/v2.0/"<<a.season<<"/schedule/"<<a.eventCode;
+	//ss<<"https://frc-api.firstinspires.org/v2.0/"<<a.season<<"/schedule/"<<a.eventCode;
+	ss<<"https://frc-api.firstinspires.org/v3.0/"<<a.season<<"/schedule/"<<a.eventCode;
 	//tournamentLevel=&teamNumber=101&start=20&end=25
 	visit(
 		overloaded{

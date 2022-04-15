@@ -7,6 +7,14 @@
 
 namespace frc_api{
 
+std::ostream& operator<<(std::ostream& o,HTTP_error const& a){
+	o<<"HTTP_error(";
+	o<<"url:"<<a.url<<" ";
+	o<<"response code:"<<a.response_code<<" ";
+	o<<a.msg;
+	return o<<")";
+}
+
 std::ostream& operator<<(std::ostream& o,Get_result const& a){
 	o<<"Get_result(";
 	o<<a.headers<<a.data;
@@ -96,6 +104,12 @@ Get_result get_url_inner(std::string const& url,std::vector<std::string> const& 
 		ss<<"URL:"<<url<<"\n";
 		ss<<"curl_easy_perform() failed: "<<curl_easy_strerror(res);
 		throw ss.str();
+	}
+
+	long response_code;
+	curl_easy_getinfo(curl,CURLINFO_RESPONSE_CODE,&response_code);
+	if(response_code!=200){
+		throw HTTP_error{url,response_code,ss.str()};
 	}
 
 	if(chunk){

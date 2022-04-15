@@ -9,6 +9,14 @@ namespace frc_api{
 
 using URL=std::string;
 
+struct HTTP_error{
+	std::string url;
+	long response_code;
+	std::string msg;
+};
+
+std::ostream& operator<<(std::ostream&,HTTP_error const&);
+
 struct Get_result{
 	std::map<std::string,std::string> headers;
 	std::string data;

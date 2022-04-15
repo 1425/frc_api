@@ -52,7 +52,11 @@ using Date=std::string;
 std::pair<std::optional<Date>,Data> Fetcher::fetch(URL url){
 	auto g=get_url(
 		url,
-		{"Authorization: Basic "+authorization,"Accept: application/json"}
+		{
+			"Authorization: Basic "+authorization,
+			"Accept: application/json",
+			"If-Modified-Since;"//: Mon, 1 Jan 1900 2:00:00 GMT"
+		}
 	);
 
 	auto f=std::find_if(g.headers.begin(),g.headers.end(),[](auto const& p){ return p.first=="Last-Modified"; });
