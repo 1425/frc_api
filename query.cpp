@@ -297,7 +297,7 @@ URL url(Event_awards const& a){
 			[&ss](Team_number a){ nyi ss<<"teamNumber="<<a; },
 			[&ss](Event_code a){ ss<<"event/"<<a; },
 			[&ss](std::pair<Event_code,Team_number> p){
-				nyi//ss<<"eventCode="<<p.first<<"&teamNumber="<<p.second;
+				ss<<"eventCode="<<p.first<<"&teamNumber="<<p.second;
 			}
 		},
 		a.which
