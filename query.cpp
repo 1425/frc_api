@@ -14,10 +14,10 @@ namespace frc_api{
 
 //generic stuff
 
-std::ostream& operator<<(std::ostream&,std::any)FRC_API_NYI
+//std::ostream& operator<<(std::ostream&,std::any)FRC_API_NYI
 std::any example(const std::any*)FRC_API_NYI
 std::any rand(const std::any*)FRC_API_NYI
-bool operator<(std::any,std::any)FRC_API_NYI
+//bool operator<(std::any,std::any)FRC_API_NYI
 
 std::any decode(JSON const& a,const std::any*){
 	std::cout<<a<<"\n";
@@ -106,10 +106,6 @@ Match_number::Match_number(int i1):i(i1){
 
 int Match_number::get()const{ return i; }
 
-bool operator<(Match_number a,Match_number b){
-	return a.get()<b.get();
-}
-
 std::ostream& operator<<(std::ostream& o,Match_number a){
 	return o<<a.get();
 }
@@ -193,11 +189,6 @@ std::tuple<A,B> rand(const std::tuple<A,B>*){
 	}\
 	NAME rand(const NAME*){\
 		return NAME{ITEMS(RAND)};\
-	}\
-	bool operator<(NAME const& a,NAME const& b){\
-		(void)a; (void)b;\
-		ITEMS(LT)\
-		return 0;\
 	}\
 	NAME decode(JSON const& in,const NAME*){\
 		if(!in.IsObject()) throw Decode_error{""#NAME,in,"expected object"};\

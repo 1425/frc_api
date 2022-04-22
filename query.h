@@ -29,9 +29,10 @@ class Match_number{
 	public:
 	explicit Match_number(int);
 	int get()const;
+
+	auto operator<=>(Match_number const&)const=default;
 };
 std::ostream& operator<<(std::ostream&,Match_number);
-bool operator<(Match_number,Match_number);
 Match_number decode(JSON const&,const Match_number*);
 
 #define FRC_API_ALLIANCE_SELECTION(X)\

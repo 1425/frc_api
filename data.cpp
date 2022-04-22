@@ -66,10 +66,6 @@ String2 decode(JSON const& in,const String2*){
 	return String2{decode(in,(std::string*)nullptr)};
 }
 
-bool operator<(Team_number const& a,Team_number const& b){
-	return a.get()<b.get();
-}
-
 Team_number decode(JSON const& in,const Team_number*){
 	return Team_number{decode(in,(int*)nullptr)};
 }

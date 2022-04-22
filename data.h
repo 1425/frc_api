@@ -19,9 +19,9 @@ using JSON=rapidjson::GenericValue<rapidjson::UTF8<>>;
 #define FRC_API_DATA(A,B) \
 	struct A{\
 		B(FRC_API_INST)\
+		auto operator<=>(frc_api::A const&)const=default;\
 	};\
 	std::ostream& operator<<(std::ostream&,A const&);\
-	bool operator<(A const&,A const&);\
 	A example(const A*);\
 	A decode(JSON const&,const A*);\
 	A rand(const A*);
@@ -41,9 +41,10 @@ class Team_number{
 	public:
 	explicit Team_number(int);
 	int get()const;
+
+	auto operator<=>(Team_number const&)const=default;
 };
 std::ostream& operator<<(std::ostream&,Team_number);
-bool operator<(Team_number const&,Team_number const&);
 Team_number decode(JSON const&,const Team_number*);
 
 class String2{
@@ -53,6 +54,8 @@ class String2{
 	public:
 	explicit String2(std::string);
 	std::string const& get()const;
+
+	auto operator<=>(String2 const&)const=default;
 };
 std::ostream& operator<<(std::ostream&,String2 const&);
 bool operator==(String2 const&,const char*);
@@ -272,6 +275,8 @@ class R0_2{
 	public:
 	explicit R0_2(int);
 	int get()const;
+
+	auto operator<=>(R0_2 const&)const=default;
 };
 std::ostream& operator<<(std::ostream&,R0_2);
 R0_2 example(const R0_2*);
