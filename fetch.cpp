@@ -35,8 +35,13 @@ std::vector<T> filter(Func f,std::vector<T> t){
 
 template<typename T>
 void print_lines(T const& t){
-	using Item=decltype(*begin(t));
-	copy(begin(t),end(t),std::ostream_iterator<Item>(std::cout,"\n"));
+	//using Item=decltype(*begin(t));
+	//std::copy(begin(t),end(t),std::ostream_iterator<Item>(std::cout,"\n"));
+
+	//Using this second implementation because the first one uses different rules to look for operator<<, which is a problem for things in std that have operator<< defined locally.
+	for(auto const& elem:t){
+		std::cout<<elem<<"\n";
+	}
 }
 
 #define MAP(F,IN) mapf([&](auto a){ return F(a); },IN)
@@ -116,7 +121,7 @@ struct Query_generator{
 template<typename T>
 auto code(T t){ return t.code; }
 
-int main1(){
+int demo(){
 	std::string key;
 	{
 		std::ifstream f("api_key");
@@ -242,9 +247,75 @@ std::ostream& operator<<(std::ostream& o,std::runtime_error const& e){
 	return o<<"runtime_error("<<e.what()<<")";
 }
 
-int main(){
+struct Args{
+	bool demo=0;
+	bool show_cache=0;
+	bool help=0;
+};
+
+Args parse_args(int argc,char **argv){
+	Args r;
+	for(int i=1;i<argc;i++){
+		std::string s=argv[i];
+		if(s=="--help"){
+			r.help=1;
+		}else if(s=="--demo"){
+			r.demo=1;
+		}else if(s=="--show_cache"){
+			r.show_cache=1;
+		}else{
+			std::cerr<<"Unrecognized argument.\n";
+			exit(1);
+		}
+	}
+	return r;
+}
+
+void help(){
+	std::cout<<"--help\n";
+	std::cout<<"\tShow this message.\n";
+	std::cout<<"--demo\n";
+	std::cout<<"\tRun some queries and see that everything is working.\n";
+	std::cout<<"--show_cache\n";
+	std::cout<<"\tPrint what's already cached.\n";
+}
+
+int show_cache(){
+	Sqlite db("cache.db");
+	auto x=db.query("SELECT url,date FROM cache");
+	auto m=mapf(
+		[](auto row){
+			assert(row.size()==2);
+			assert(row[0].first=="url");
+			assert(row[0].second);
+			assert(row[1].first=="date");
+			assert(row[1].second);
+			return make_pair(*row[0].second,*row[1].second);
+		},
+		x
+	);
+	print_lines(m);
+	return 0;
+}
+
+int main1(int argc,char **argv){
+	auto args=parse_args(argc,argv);
+	if(args.show_cache){
+		return show_cache();
+	}else if(args.help){
+		help();
+		return 0;
+	}else if(args.demo){
+		return demo();
+	}
+
+	help();
+	return 0;
+}
+
+int main(int argc,char **argv){
 	try{
-		return main1();
+		return main1(argc,argv);
 	}catch(Decode_error e){
 		FRC_API_PRINT(e);
 		return 1;

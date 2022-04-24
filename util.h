@@ -17,27 +17,27 @@ namespace frc_api{
 
 template<typename A,typename B>
 std::ostream& operator<<(std::ostream& o,std::pair<A,B> const& p){
-    return o<<"("<<p.first<<","<<p.second<<")";
+	return o<<"("<<p.first<<","<<p.second<<")";
 }
 
 template<typename A,typename B>
 std::ostream& operator<<(std::ostream& o,std::map<A,B> const& a){
-    o<<"{ ";
+	o<<"{ ";
 	for(auto const& elem:a) o<<elem<<" ";
-    return o<<"}";
+	return o<<"}";
 }
 
 template<typename... A>
 std::ostream& operator<<(std::ostream& o,std::variant<A...> const& a){
-    std::visit([&](auto &&elem){ o<<elem; },a);
-    return o;
+	std::visit([&](auto &&elem){ o<<elem; },a);
+	return o;
 }
 
 template<typename T>
 std::ostream& operator<<(std::ostream& o,std::vector<T> const& a){
-    o<<"[ ";
-	copy(begin(a),end(a),std::ostream_iterator<T>(o," "));
-    return o<<"]";
+	o<<"[ ";
+	std::copy(begin(a),end(a),std::ostream_iterator<T>(o," "));
+	return o<<"]";
 }
 
 std::vector<size_t> range(size_t lim);
@@ -45,8 +45,8 @@ std::vector<size_t> range(size_t,size_t lim);
 
 template<typename T>
 std::ostream& operator<<(std::ostream& o,std::optional<T> const& a){
-    if(a) return o<<*a;
-    return o<<"NULL";
+	if(a) return o<<*a;
+	return o<<"NULL";
 }
 
 template<typename T>
