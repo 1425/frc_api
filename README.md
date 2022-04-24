@@ -8,7 +8,7 @@ Note that the FRC events API requires being given a key before it will allow acc
   * libcurl; tested with version 7.47.0
   * sqlite; tested with version 3.11.0
   * rapidjson; tested with version 0.12
-  * A C++17 compiler; tested with gcc 7.2.0
+  * A C++20 compiler; tested with gcc 11.2.0
 
 # LICENSE
 GPL version 3.
