@@ -93,9 +93,11 @@ Cache_policy Cache_policy::date(Date date){
 
 Cache_policy Cache_policy::none(){ return Cache_policy{Type::NONE}; }
 
-Cache::Cache():db("cache.db"),policy(Cache_policy::any()){
+Cache::Cache(const char *path):db(path),policy(Cache_policy::any()){
 	db.query("CREATE TABLE IF NOT EXISTS cache (url STRING UNIQUE NOT NULL,date INT NOT NULL,body VARCHAR NOT NULL);");
 }
+
+Cache::Cache():Cache("cache.db"){}
 
 void escape(std::ostream& o,std::string const& s){
 	std::for_each(begin(s),end(s),[&](char c){
