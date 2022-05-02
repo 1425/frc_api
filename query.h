@@ -233,6 +233,13 @@ std::tuple<A,B,C,D> rand(const std::tuple<A,B,C,D>*){
 	);
 }
 
+#ifdef __clang__
+
+//Clang can't understand the definition for this, so don't give it the definition.
+template<typename ... A>
+std::variant<A...> rand(const std::variant<A...> *);
+
+#else
 template<typename ... A>
 struct Get_all{
 	using Out=std::variant<A...>;
@@ -256,6 +263,7 @@ std::variant<A...> rand(const std::variant<A...> *x){
 	Get_all<A...> a{};
 	return a.randomize(x);
 }
+#endif
 
 }
 
