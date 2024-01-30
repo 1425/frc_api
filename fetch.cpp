@@ -166,13 +166,16 @@ int demo(){
 		auto event_codes=MAP(code,g.Events);
 		FRC_API_PRINT(event_codes);
 		FRC_API_PRINT(event_codes.size());
-		for(auto event_code:take(2000,event_codes)){
+		for(auto event_code:take(5,event_codes)){
 			//PRINT(event_code);
 			try{
 				run(f,Alliance_selection{year,event_code});
 			}catch(Decode_error){
 				std::cout<<"Failed on "<<event_code<<"\n";
 				//FRC_API_PRINT(event_code);
+				continue;
+			}catch(HTTP_error const&){
+				std::cout<<"Failed on fetch: "<<event_code<<"\n";
 				continue;
 			}
 
@@ -327,6 +330,9 @@ int main(int argc,char **argv){
 		return 1;
 	}catch(frc_api::HTTP_error const& e){
 		std::cout<<e<<"\n";
+		return 1;
+	}catch(std::string const& s){
+		std::cout<<"s:"<<s<<"\n";
 		return 1;
 	}
 }

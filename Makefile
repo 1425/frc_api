@@ -1,3 +1,4 @@
+CXX=g++-12
 CXXFLAGS = -std=c++20 -Wall -Wextra -O2
 LIBS = -lcurl -lsqlite3
 

@@ -165,8 +165,34 @@ std::tuple<A,B> rand(const std::tuple<A,B>*){
 #define RAND(A,B) rand((const A*)nullptr),
 #define LT(A,B) if(a.B<b.B) return 1; if(b.B<a.B) return 0;
 //#define DECODE(A,B) decode(in[""#B],(A*)nullptr),
-#define DECODE(A,B) [&](){ \
-		if(!in.HasMember(""#B)) throw Decode_error{""#B,in,"not found"}; \
+
+template<typename T>
+constexpr bool is_optional(std::optional<T> const*){
+	return 1;
+}
+
+template<typename T>
+constexpr bool is_optional(T const*){
+	return 0;
+}
+
+template<typename T>
+constexpr std::optional<T> null1(std::optional<T>*){
+	return std::nullopt;
+}
+
+template<typename T>
+constexpr T null1(T*){
+	assert(0);
+}
+
+#define DECODE(A,B) [&]()->A{ \
+		if(!in.HasMember(""#B)){\
+			if constexpr(is_optional((A*)0)){\
+				return null1((A*)0);\
+			}\
+			throw Decode_error{""#B,in,"not found"}; \
+		}\
 		try{\
 			return decode(in[""#B],(A*)nullptr); \
 		}catch(Decode_error e){\

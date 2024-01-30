@@ -23,11 +23,16 @@ Decode_error::Decode_error(std::vector<std::string> path1,JSON const& json,std::
 }
 
 std::ostream& operator<<(std::ostream& o,Decode_error const& a){
-	o<<"Decode_error(";
+	/*o<<"Decode_error(";
 	o<<"from:"<<a.value<<" ";
 	o<<"path:"<<a.path<<" ";
 	o<<"description:"<<a.description;
-	return o<<")";
+	return o<<")";*/
+	o<<"Decode_error(\n\t";
+	o<<"from:"<<a.value<<"\n\t";
+	o<<"path:"<<a.path<<"\n\t";
+	o<<"description:"<<a.description;
+	return o<<"\n)";
 }
 
 std::ostream& operator<<(std::ostream& o,rapidjson::GenericValue<rapidjson::UTF8<>> const& a){

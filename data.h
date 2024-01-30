@@ -187,7 +187,7 @@ FRC_API_DATA(Match_Team,FRC_API_MATCH_TEAM)
 	X(int,scoreBlueFoul)\
 	X(int,scoreBlueAuto)\
 	X(std::vector<Match_Team>,teams)\
-	X(std::string,level)\
+	X(std::optional<std::string>,level)\
 	X(std::string,autoStartTime)
 
 FRC_API_DATA(Match,FRC_API_MATCH)
