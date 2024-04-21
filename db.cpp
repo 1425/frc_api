@@ -169,7 +169,7 @@ std::pair<std::optional<HTTP_Date>,Data> Cached_fetcher::fetch(URL url){
 	return f;
 }
 
-Nonempty_string::Nonempty_string(std::string s1):s(move(s1)){}
+Nonempty_string::Nonempty_string(std::string s1):s(std::move(s1)){}
 
 std::string const& Nonempty_string::str()const{
 	return s;

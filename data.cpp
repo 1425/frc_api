@@ -27,7 +27,7 @@ bool alphanumeric(char c){
 	return isalpha(c) || isdigit(c);
 }
 
-String2::String2(std::string a):s(move(a)){
+String2::String2(std::string a):s(std::move(a)){
 	if(s.size()<2) throw std::invalid_argument("String2");
 	if(!all_of(begin(a),end(a),alphanumeric)){
 		throw std::invalid_argument{"String2"};
