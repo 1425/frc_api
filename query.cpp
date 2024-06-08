@@ -67,7 +67,8 @@ Season decode(JSON const&,const Season*)FRC_API_NYI
 
 bool rand(const bool*){ return ::rand()%2; }
 
-static const int MAX_TEAM=10000;
+//Team numbers started exceeting 10,000 in the spring of 2024.
+static const int MAX_TEAM=15000;
 
 bool normal_team_number(int i){
 	return i>=1 && i<MAX_TEAM;
