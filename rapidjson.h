@@ -26,21 +26,21 @@ struct Decode_error{
 };
 std::ostream& operator<<(std::ostream&,Decode_error const&);
 
-std::ostream& operator<<(std::ostream&,rapidjson::GenericValue<rapidjson::UTF8<>> const&);
+std::ostream& operator<<(std::ostream&,JSON const&);
 
 template<typename A,typename B,typename C,typename D>
-std::tuple<A,B,C,D> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::tuple<A,B,C,D> *x);
+std::tuple<A,B,C,D> decode(JSON const& in,const std::tuple<A,B,C,D> *x);
 
 template<typename T>
-std::optional<T> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::optional<T>*);
+std::optional<T> decode(JSON const& in,const std::optional<T>*);
 
-std::string decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::string*);
-bool decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const bool*);
-int decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const int*);
-unsigned int decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const unsigned int*);
-int64_t decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const int64_t *);
-double decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const double*);
-std::nullptr_t decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::nullptr_t*);
+std::string decode(JSON const& in,const std::string*);
+bool decode(JSON const& in,const bool*);
+int decode(JSON const& in,const int*);
+unsigned int decode(JSON const& in,const unsigned int*);
+int64_t decode(JSON const& in,const int64_t *);
+double decode(JSON const& in,const double*);
+std::nullptr_t decode(JSON const& in,const std::nullptr_t*);
 
 template<typename T>
 std::variant<T,Decode_error> maybe_decode(JSON const& in,const T *t){
@@ -57,7 +57,7 @@ std::variant<A> decode(JSON const& in,const std::variant<A> *){
 }
 
 template<typename A,typename B>
-std::variant<A,B> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::variant<A,B> *x){
+std::variant<A,B> decode(JSON const& in,const std::variant<A,B> *x){
 	auto va=maybe_decode(in,(A*)nullptr);
 	auto vb=maybe_decode(in,(B*)nullptr);
 	auto a=std::holds_alternative<A>(va);
@@ -79,7 +79,7 @@ std::variant<A,B> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,co
 }
 
 template<typename A,typename B,typename C>
-std::variant<A,B,C> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::variant<A,B,C>*){
+std::variant<A,B,C> decode(JSON const& in,const std::variant<A,B,C>*){
 	try{
 		return decode(in,(A*)nullptr);
 	}catch(...){
@@ -92,7 +92,7 @@ std::variant<A,B,C> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,
 }
 
 template<typename A,typename B,typename C,typename D>
-std::variant<A,B,C,D> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::variant<A,B,C,D>*){
+std::variant<A,B,C,D> decode(JSON const& in,const std::variant<A,B,C,D>*){
 	try{
 		return decode(in,(A*)nullptr);
 	}catch(...){
@@ -110,7 +110,7 @@ std::variant<A,B,C,D> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& i
 
 
 template<typename A,typename B,typename C,typename D,typename E>
-std::variant<A,B,C,D,E> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::variant<A,B,C,D,E>*){
+std::variant<A,B,C,D,E> decode(JSON const& in,const std::variant<A,B,C,D,E>*){
 	try{
 		return decode(in,(A*)nullptr);
 	}catch(...){
@@ -132,7 +132,7 @@ std::variant<A,B,C,D,E> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const&
 
 
 template<typename A,typename B>
-std::map<A,B> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::map<A,B> *x){
+std::map<A,B> decode(JSON const& in,const std::map<A,B> *x){
 	if(!in.IsObject()){
 		throw Decode_error{typeid(x).name(),in,"expected object"};
 	}
@@ -153,7 +153,7 @@ std::map<A,B> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const 
 }
 
 template<typename T>
-std::vector<T> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::vector<T> *x){
+std::vector<T> decode(JSON const& in,const std::vector<T> *x){
 	if(!in.IsArray()){
 		throw Decode_error{typeid(x).name(),in,"expected array"};
 	}
@@ -168,7 +168,7 @@ std::vector<T> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const
 }
 
 template<typename T,size_t LEN>
-std::array<T,LEN> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::array<T,LEN> *x){
+std::array<T,LEN> decode(JSON const& in,const std::array<T,LEN> *x){
 	if(!in.IsArray()) throw Decode_error{typeid(x).name(),in,"expected array"};
 	if(in.Size()!=LEN){
 		std::ostringstream ss;
@@ -190,7 +190,7 @@ std::array<T,LEN> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,co
 }
 
 template<typename T>
-std::optional<T> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::optional<T>*){
+std::optional<T> decode(JSON const& in,const std::optional<T>*){
 	if(in.IsNull()){
 		return {};
 	}
@@ -198,7 +198,7 @@ std::optional<T> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,con
 }
 
 template<typename A,typename B>
-std::tuple<A,B> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::tuple<A,B> *x){
+std::tuple<A,B> decode(JSON const& in,const std::tuple<A,B> *x){
 	if(!in.IsArray()){
 		throw Decode_error{typeid(x).name(),in,"expected array"};
 	}
@@ -214,7 +214,7 @@ std::tuple<A,B> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,cons
 }
 
 template<typename A,typename B,typename C>
-std::tuple<A,B,C> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::tuple<A,B,C> *x){
+std::tuple<A,B,C> decode(JSON const& in,const std::tuple<A,B,C> *x){
 	if(!in.IsArray()){
 		throw Decode_error{typeid(x).name(),in,"expected array"};
 	}
@@ -231,7 +231,7 @@ std::tuple<A,B,C> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,co
 }
 
 template<typename A,typename B,typename C,typename D>
-std::tuple<A,B,C,D> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::tuple<A,B,C,D> *x){
+std::tuple<A,B,C,D> decode(JSON const& in,const std::tuple<A,B,C,D> *x){
 	if(!in.IsArray()){
 		throw Decode_error{typeid(x).name(),in,"expected array"};
 	}
@@ -249,7 +249,7 @@ std::tuple<A,B,C,D> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,
 }
 
 template<typename A,typename B,typename C,typename D,typename E>
-std::tuple<A,B,C,D,E> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::tuple<A,B,C,D,E> *x){
+std::tuple<A,B,C,D,E> decode(JSON const& in,const std::tuple<A,B,C,D,E> *x){
 	if(!in.IsArray()){
 		throw Decode_error{typeid(x).name(),in,"expected array"};
 	}
@@ -268,7 +268,7 @@ std::tuple<A,B,C,D,E> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& i
 }
 
 template<typename A,typename B,typename C,typename D,typename E,typename F,typename G>
-std::tuple<A,B,C,D,E,F,G> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::tuple<A,B,C,D,E,F,G> *x){
+std::tuple<A,B,C,D,E,F,G> decode(JSON const& in,const std::tuple<A,B,C,D,E,F,G> *x){
 	if(!in.IsArray()){
 		throw Decode_error{typeid(x).name(),in,"expected array"};
 	}
@@ -289,7 +289,7 @@ std::tuple<A,B,C,D,E,F,G> decode(rapidjson::GenericValue<rapidjson::UTF8<>> cons
 }
 
 template<typename A,typename B>
-std::pair<A,B> decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::pair<A,B> *x){
+std::pair<A,B> decode(JSON const& in,const std::pair<A,B> *x){
 	if(!in.IsArray()){
 		throw Decode_error{typeid(x).name(),in,"expected array"};
 	}
