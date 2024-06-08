@@ -34,7 +34,7 @@ double rand(const double*)FRC_API_NYI
 
 //start normal program logic
 
-static const int MAX_YEAR=2022;
+static const int MAX_YEAR=2024;
 
 Season::Season(int i1):i(i1){
 	if(i<2015 || i>MAX_YEAR){

@@ -13,11 +13,11 @@ Decode_error::Decode_error(const char *s,const char *value1,std::string what):
 {}
 
 Decode_error::Decode_error(const char *s,JSON const& json,std::string what):
-	path({s}),value(to_string(json)),description(move(what))
+	path({s}),value(to_string(json)),description(std::move(what))
 {}
 
 Decode_error::Decode_error(std::vector<std::string> path1,JSON const& json,std::string what):
-	path(move(path1)),value(to_string(json)),description(move(what))
+	path(std::move(path1)),value(to_string(json)),description(std::move(what))
 {
 	//could check that path is not empty...or make it so that the how path variable can't be empty.
 }

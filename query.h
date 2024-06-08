@@ -237,7 +237,9 @@ std::tuple<A,B,C,D> rand(const std::tuple<A,B,C,D>*){
 
 //Clang can't understand the definition for this, so don't give it the definition.
 template<typename ... A>
-std::variant<A...> rand(const std::variant<A...> *);
+std::variant<A...> rand(const std::variant<A...> *){
+	assert(0);
+}
 
 #else
 template<typename ... A>
