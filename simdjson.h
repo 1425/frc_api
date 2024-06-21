@@ -4,7 +4,6 @@
 #include<simdjson.h>
 #include<map>
 #include<variant>
-#include "util.h"
 
 namespace frc_api{
 
@@ -185,8 +184,9 @@ std::variant<Ts...> decode(JSON_array,std::variant<Ts...> const*){
 
 template<typename ...Ts>
 std::variant<Ts...> decode(JSON_value,std::variant<Ts...> const*){
+	assert(0);/*
 	FRC_API_PRINT(sizeof...(Ts))
-	FRC_API_NYI
+	FRC_API_NYI*/
 }
 
 template<typename A,typename B>
