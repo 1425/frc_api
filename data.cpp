@@ -2,7 +2,6 @@
 #include<iostream>
 #include<cassert>
 #include "util.h"
-#include "rapidjson.h"
 
 #define nyi FRC_API_NYI
 
@@ -18,10 +17,6 @@ R0_2::R0_2(int i1):i(i1){
 
 R0_2 example(const R0_2*)nyi
 R0_2 rand(const R0_2*)nyi
-
-R0_2 decode(JSON const& in,const R0_2*){
-	return R0_2{decode(in,(int*)0)};
-}
 
 R0_2 decode(JSON_value in,const R0_2*){
 	return R0_2{decode(in,(int*)0)};
@@ -66,16 +61,8 @@ std::ostream& operator<<(std::ostream& o,String2 const& a){
 	return o<<a.get();
 }
 
-String2 decode(JSON const& in,const String2*){
-	return String2{decode(in,(std::string*)nullptr)};
-}
-
 String2 decode(JSON_value in,const String2*){
 	return String2{decode(in,(std::string*)nullptr)};
-}
-
-Team_number decode(JSON const& in,const Team_number*){
-	return Team_number{decode(in,(int*)nullptr)};
 }
 
 Team_number decode(JSON_value in,const Team_number*){
@@ -103,15 +90,10 @@ Team_number decode(JSON_value in,const Team_number*){
 		std::vector<NAME> options{ITEMS(ITEM_LIST)};\
 		return options[::rand()%options.size()];\
 	}\
-	NAME decode(JSON const& in,const NAME* x){\
-		auto s=decode(in,(std::string*)nullptr);\
-		ITEMS(DECODE)\
-		throw Decode_error{typeid(*x).name(),in,"unexpected value"};\
-	}\
 	NAME decode(JSON_value in,NAME const* x){\
 		auto s=decode(in,(std::string*)nullptr);\
 		ITEMS(DECODE)\
-		throw Decode_error{typeid(*x).name(),in,"unexpected value"};\
+		throw Decode_error{typeid(*x).name(),as_string(in),"unexpected value"};\
 	}\
 	NAME decode(JSON_array,NAME const*){\
 		std::cout<<"e2\n";\

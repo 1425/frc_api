@@ -3,7 +3,6 @@
 #include "curl.h"
 #include "util.h"
 #include "db.h"
-#include "rapidjson.h"
 
 using namespace frc_api;
 //using namespace std;

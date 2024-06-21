@@ -6,7 +6,6 @@
 #include<set>
 #include<sstream>
 #include "util.h"
-#include "rapidjson.h"
 
 #define nyi FRC_API_NYI
 
@@ -18,11 +17,6 @@ namespace frc_api{
 std::any example(const std::any*)FRC_API_NYI
 std::any rand(const std::any*)FRC_API_NYI
 //bool operator<(std::any,std::any)FRC_API_NYI
-
-std::any decode(JSON const& a,const std::any*){
-	std::cout<<a<<"\n";
-	FRC_API_NYI
-}
 
 bool example(const bool*){ return 0; }
 
@@ -63,7 +57,6 @@ std::ostream& operator<<(std::ostream& o,Season a){
 Season example(const Season*){ return Season{2015}; }
 Season rand(const Season*){ return Season{2015+::rand()%3}; }
 
-Season decode(JSON const&,const Season*)FRC_API_NYI
 Season decode(JSON_value,const Season*)FRC_API_NYI
 
 bool rand(const bool*){ return ::rand()%2; }
@@ -82,7 +75,7 @@ bool tmp_team_number(int i){
 
 Team_number::Team_number(int i1):i(i1){
 	if(!normal_team_number(i) && !tmp_team_number(i)){
-		throw std::invalid_argument("Team_number:"+to_string(i));
+		throw std::invalid_argument("Team_number:"+std::to_string(i));
 	}
 }
 
@@ -118,10 +111,6 @@ Match_number rand(const Match_number*){
 
 Match_number example(const Match_number*){
 	return Match_number(1);
-}
-
-Match_number decode(JSON const&,const Match_number*){
-	FRC_API_NYI
 }
 
 Match_number decode(JSON_value,const Match_number*){
@@ -247,20 +236,6 @@ constexpr T null1(T*){
 	NAME rand(const NAME*){\
 		return NAME{ITEMS(RAND)};\
 	}\
-	NAME decode(JSON const& in,const NAME*){\
-		if(!in.IsObject()) throw Decode_error{""#NAME,in,"expected object"};\
-		std::for_each(in.MemberBegin(),in.MemberEnd(),[&](auto const& x){\
-			(void)x; \
-			ITEMS(RETURN_IF_PRESENT)\
-			throw Decode_error{""#NAME,in,"unexpected:"+to_string(x.name)};\
-		});\
-		try{\
-			return NAME{ITEMS(DECODE)};\
-		}catch(Decode_error e){\
-			e.path.push_back(""#NAME);\
-			throw e; \
-		}\
-	}\
 	NAME decode(JSON_value in,NAME const* x){\
 		if(in.type()!=simdjson::dom::element_type::OBJECT){\
 			throw Decode_error(""#NAME,"",std::string{"wrong type"});\
@@ -268,7 +243,6 @@ constexpr T null1(T*){
 		return decode(in.get_object(),x);\
 	}\
 	NAME decode(JSON_array,NAME const*){\
-		std::cout<<"t2\n";\
 		FRC_API_NYI\
 	}\
 	NAME decode(JSON_object in,NAME const*){\
@@ -281,7 +255,6 @@ constexpr T null1(T*){
 		}\
 	}\
 	NAME decode(std::nullptr_t,NAME const*){\
-		std::cout<<"t4\n";\
 		FRC_API_NYI\
 	}\
 
