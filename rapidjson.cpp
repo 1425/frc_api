@@ -8,6 +8,7 @@
 
 namespace frc_api{
 
+#if 0
 Decode_error::Decode_error(const char *s,const char *value1,std::string what):
 	path({s}),value(value1),description(what)
 {}
@@ -34,6 +35,7 @@ std::ostream& operator<<(std::ostream& o,Decode_error const& a){
 	o<<"description:"<<a.description;
 	return o<<"\n)";
 }
+#endif
 
 std::ostream& operator<<(std::ostream& o,rapidjson::GenericValue<rapidjson::UTF8<>> const& a){
 	if(a.IsInt()) return o<<a.GetInt();
@@ -69,13 +71,13 @@ std::ostream& operator<<(std::ostream& o,rapidjson::GenericValue<rapidjson::UTF8
 
 std::string decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const std::string*){
 	if(!in.IsString()){
-		throw Decode_error{"string",in,"wrong type"};
+		FRC_API_NYI//throw Decode_error{"string",in,"wrong type"};
 	}
 	return in.GetString();
 }
 
 bool decode(rapidjson::GenericValue<rapidjson::UTF8<>> const& in,const bool*){
-	if(!in.IsBool()) throw Decode_error{"bool",in,"wrong type"};
+	FRC_API_NYI//if(!in.IsBool()) throw Decode_error{"bool",in,"wrong type"};
 	return in.GetBool();
 }
 

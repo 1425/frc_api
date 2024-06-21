@@ -23,6 +23,10 @@ R0_2 decode(JSON const& in,const R0_2*){
 	return R0_2{decode(in,(int*)0)};
 }
 
+R0_2 decode(JSON_value in,const R0_2*){
+	return R0_2{decode(in,(int*)0)};
+}
+
 bool alphanumeric(char c){
 	return isalpha(c) || isdigit(c);
 }
@@ -66,7 +70,15 @@ String2 decode(JSON const& in,const String2*){
 	return String2{decode(in,(std::string*)nullptr)};
 }
 
+String2 decode(JSON_value in,const String2*){
+	return String2{decode(in,(std::string*)nullptr)};
+}
+
 Team_number decode(JSON const& in,const Team_number*){
+	return Team_number{decode(in,(int*)nullptr)};
+}
+
+Team_number decode(JSON_value in,const Team_number*){
 	return Team_number{decode(in,(int*)nullptr)};
 }
 
@@ -95,7 +107,20 @@ Team_number decode(JSON const& in,const Team_number*){
 		auto s=decode(in,(std::string*)nullptr);\
 		ITEMS(DECODE)\
 		throw Decode_error{typeid(*x).name(),in,"unexpected value"};\
-	}
+	}\
+	NAME decode(JSON_value in,NAME const* x){\
+		auto s=decode(in,(std::string*)nullptr);\
+		ITEMS(DECODE)\
+		throw Decode_error{typeid(*x).name(),in,"unexpected value"};\
+	}\
+	NAME decode(JSON_array,NAME const*){\
+		std::cout<<"e2\n";\
+		FRC_API_NYI\
+	}\
+	NAME decode(JSON_object,NAME const*){\
+		std::cout<<"e3\n";\
+		FRC_API_NYI\
+	}\
 
 #define NAME Tournament_level
 IMPL_ENUM(FRC_API_TOURNAMENT_LEVEL)

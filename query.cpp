@@ -64,6 +64,7 @@ Season example(const Season*){ return Season{2015}; }
 Season rand(const Season*){ return Season{2015+::rand()%3}; }
 
 Season decode(JSON const&,const Season*)FRC_API_NYI
+Season decode(JSON_value,const Season*)FRC_API_NYI
 
 bool rand(const bool*){ return ::rand()%2; }
 
@@ -120,6 +121,10 @@ Match_number example(const Match_number*){
 }
 
 Match_number decode(JSON const&,const Match_number*){
+	FRC_API_NYI
+}
+
+Match_number decode(JSON_value,const Match_number*){
 	FRC_API_NYI
 }
 
@@ -187,6 +192,31 @@ constexpr T null1(T*){
 	assert(0);
 }
 
+/*
+		if(!in.HasMember(""#B)){\
+			if constexpr(is_optional((A*)0)){\
+				return null1((A*)0);\
+			}\
+			throw Decode_error{""#B,in,"not found"}; \
+		}\
+*/
+
+#define DECODE_B(A,B) [&]()->A{ \
+		try{\
+			try{\
+				return decode(in[""#B],(A*)nullptr); \
+			}catch(simdjson::simdjson_error const&){\
+				if constexpr(is_optional((A*)0)){\
+					return null1((A*)0);\
+				}\
+				throw Decode_error{""#B,as_string(in),"not found"};\
+			}\
+		}catch(Decode_error e){\
+			e.path.push_back(""#B);\
+			throw e;\
+		}\
+	}(),
+
 #define DECODE(A,B) [&]()->A{ \
 		if(!in.HasMember(""#B)){\
 			if constexpr(is_optional((A*)0)){\
@@ -230,8 +260,30 @@ constexpr T null1(T*){
 			e.path.push_back(""#NAME);\
 			throw e; \
 		}\
-	}
-
+	}\
+	NAME decode(JSON_value in,NAME const* x){\
+		if(in.type()!=simdjson::dom::element_type::OBJECT){\
+			throw Decode_error(""#NAME,"",std::string{"wrong type"});\
+		}\
+		return decode(in.get_object(),x);\
+	}\
+	NAME decode(JSON_array,NAME const*){\
+		std::cout<<"t2\n";\
+		FRC_API_NYI\
+	}\
+	NAME decode(JSON_object in,NAME const*){\
+		(void)in;\
+		try{\
+			return NAME{ITEMS(DECODE_B)};\
+		}catch(Decode_error e){\
+			e.path.push_back(""#NAME);\
+			throw e;\
+		}\
+	}\
+	NAME decode(std::nullptr_t,NAME const*){\
+		std::cout<<"t4\n";\
+		FRC_API_NYI\
+	}\
 
 IMPL(API_index,FRC_API_API_INDEX)
 IMPL(Alliance_selection,FRC_API_ALLIANCE_SELECTION)

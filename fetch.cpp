@@ -50,10 +50,22 @@ template<typename Fetcher,typename T>
 auto run(Fetcher &fetcher,URL url,const T*){
 	auto g=fetcher.fetch(url);
 	//PRINT(g);
-	rapidjson::Document a;
-	a.Parse(g.second.c_str());
+	//rapidjson::Document a;
+	//a.Parse(g.second.c_str());
+	simdjson::dom::parser parser;
+	simdjson::padded_string str(g.second);
+	auto doc=parser.parse(str);
 	try{
-		return decode(a,(T*)nullptr);
+		switch(doc.type()){
+			case simdjson::dom::element_type::ARRAY:
+				return decode(doc.get_array(),(T*)nullptr);
+			case simdjson::dom::element_type::OBJECT:
+				return decode(doc.get_object(),(T*)nullptr);
+			case simdjson::dom::element_type::NULL_VALUE:
+				return decode(nullptr,(T*)nullptr);
+			default:
+				throw Decode_error{typeid(T).name(),"","unexpected type"};
+		}
 	}catch(...){
 		std::cout<<url<<"\n";
 		throw;

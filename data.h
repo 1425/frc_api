@@ -8,6 +8,7 @@
 #include<any>
 #include<variant>
 #include "rapidjson/document.h"
+#include "simdjson.h"
 
 namespace frc_api{
 
@@ -23,8 +24,12 @@ using JSON=rapidjson::GenericValue<rapidjson::UTF8<>>;
 	};\
 	std::ostream& operator<<(std::ostream&,A const&);\
 	A example(const A*);\
+	A rand(const A*);\
 	A decode(JSON const&,const A*);\
-	A rand(const A*);
+	A decode(JSON_value,const A*);\
+	A decode(JSON_array,A const*);\
+	A decode(JSON_object,A const*);\
+	A decode(std::nullptr_t,A const*);\
 
 #define FRC_API_LIST(A) A,
 
@@ -33,7 +38,8 @@ using JSON=rapidjson::GenericValue<rapidjson::UTF8<>>;
 	std::ostream& operator<<(std::ostream&,A);\
 	A example(const A*);\
 	A rand(const A*);\
-	A decode(JSON const&,const A*);
+	A decode(JSON const&,const A*);\
+	A decode(JSON_value,A const*);
 
 class Team_number{
 	int i;
@@ -46,6 +52,7 @@ class Team_number{
 };
 std::ostream& operator<<(std::ostream&,Team_number);
 Team_number decode(JSON const&,const Team_number*);
+Team_number decode(JSON_value,const Team_number*);
 
 class String2{
 	//String of length at least 2 that is alphanumeric
@@ -63,6 +70,7 @@ bool operator!=(String2 const&,const char*);
 String2 example(const String2*);
 String2 rand(const String2*);
 String2 decode(JSON const&,const String2*);
+String2 decode(JSON_value,const String2*);
 
 using Event_code=String2;
 using District_code=String2;
@@ -282,6 +290,7 @@ std::ostream& operator<<(std::ostream&,R0_2);
 R0_2 example(const R0_2*);
 R0_2 rand(const R0_2*);
 R0_2 decode(JSON const&,const R0_2*);
+R0_2 decode(JSON_value,const R0_2*);
 
 using Defense=std::string;//TODO: Make enum
 

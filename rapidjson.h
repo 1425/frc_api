@@ -10,12 +10,13 @@
 #include<sstream>
 #include<algorithm>
 #include "rapidjson/document.h"
+#include "simdjson.h"
 
 namespace frc_api{
 
 using JSON=rapidjson::GenericValue<rapidjson::UTF8<>>;
 
-struct Decode_error{
+/*struct Decode_error{
 	std::vector<std::string> path;
 	std::string value;
 	std::string description;
@@ -24,7 +25,7 @@ struct Decode_error{
 	Decode_error(const char *,JSON const&,std::string);
 	Decode_error(std::vector<std::string>,JSON const&,std::string);
 };
-std::ostream& operator<<(std::ostream&,Decode_error const&);
+std::ostream& operator<<(std::ostream&,Decode_error const&);*/
 
 std::ostream& operator<<(std::ostream&,JSON const&);
 
@@ -65,7 +66,7 @@ std::variant<A,B> decode(JSON const& in,const std::variant<A,B> *x){
 	if(a && !b) return std::get<A>(va);
 	if(!a && b) return std::get<B>(vb);
 	if(!a && !b){
-		throw Decode_error{
+		FRC_API_NYI/*throw Decode_error{
 			{typeid(x).name()},
 			in,
 			[&](){
@@ -73,7 +74,7 @@ std::variant<A,B> decode(JSON const& in,const std::variant<A,B> *x){
 				ss<<"No valid options: "<<std::get<Decode_error>(va)<<" "<<std::get<Decode_error>(vb);
 				return ss.str();
 			}()
-		};
+		};*/
 	}
 	throw Decode_error{typeid(x).name(),in,"Multiple valid options"};
 }
