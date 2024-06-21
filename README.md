@@ -5,10 +5,10 @@ This follows a similar style to an interface to The Blue Alliance's API implemen
 Note that the FRC events API requires being given a key before it will allow access; without that this program is not very useful.  Note that they do continue to give out the keys although the process is not instantaneous.  If you're in a hurry and the same data is available, you may be better off using the API of The Blue Alliance.
 
 # PREREQUISITES
-  * libcurl; tested with version 7.47.0
-  * sqlite; tested with version 3.11.0
-  * rapidjson; tested with version 0.12
-  * A C++20 compiler; tested with gcc 11.2.0
+  * libcurl; tested with version 8.5.0
+  * sqlite; tested with version 3.45.1
+  * simdjson; tested with version 3.6.4
+  * A C++20 compiler; tested with gcc 13.2.0
 
 # LICENSE
 GPL version 3.
