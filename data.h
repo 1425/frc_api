@@ -13,7 +13,6 @@ namespace frc_api{
 
 #define FRC_API_INST(TYPE,NAME) TYPE NAME;
 
-//TODO: Make this do stuff.
 #define FRC_API_DATA(A,B) \
 	struct A{\
 		B(FRC_API_INST)\
@@ -65,8 +64,41 @@ String2 example(const String2*);
 String2 rand(const String2*);
 String2 decode(JSON_value,const String2*);
 
-using Event_code=String2;
-using District_code=String2;
+class Event_code{
+	String2 data;
+
+	public:
+	explicit Event_code(String2);
+	explicit Event_code(const char*);
+
+	operator String2()const;
+
+	std::string get()const;
+
+	auto operator<=>(Event_code const&)const=default;
+};
+
+Event_code example(Event_code const*);
+Event_code rand(Event_code const*);
+Event_code decode(JSON_value,Event_code const*);
+
+class District_code{
+	String2 data;
+
+	public:
+	explicit District_code(String2);
+	explicit District_code(const char*);
+
+	operator String2()const;
+
+	std::string get()const;
+
+	auto operator<=>(District_code const&)const=default;
+};
+
+District_code example(District_code const*);
+District_code rand(District_code const*);
+District_code decode(JSON_value,District_code const*);
 
 using Alliance_number=int;//1-8
 
@@ -692,6 +724,28 @@ FRC_API_DATA(RegistrationRecord,FRC_API_REGISTRATIONRECORD)
 	X(std::vector<RegistrationRecord>,Registrations)
 
 FRC_API_DATA(Registrations,FRC_API_REGISTRATIONS)
+
+#define FRC_API_DISTRICTRANKINGS_ITEM(X)\
+	X(District_code,districtCode)\
+	X(int,teamNumber)\
+	X(int,rank)\
+	X(int,totalPoints)\
+	X(std::optional<Event_code>,event1Code)\
+	X(std::optional<double>,event1Points)\
+	X(std::optional<Event_code>,event2Code)\
+	X(std::optional<double>,event2Points)\
+	X(std::optional<std::string>,districtCmpCode)\
+	X(std::optional<double>,districtCmpPoints)\
+	X(int,adjustmentPoints)\
+	X(bool,qualifiedDistrictCmp)\
+	X(bool,qualifiedFirstCmp)
+	
+FRC_API_DATA(DistrictRankings_item,FRC_API_DISTRICTRANKINGS_ITEM)
+
+#define FRC_API_DISTRICTRANKINGS(X)\
+	X(std::vector<DistrictRankings_item>,districtRanks)
+
+FRC_API_DATA(DistrictRankings,FRC_API_DISTRICTRANKINGS)
 
 }
 

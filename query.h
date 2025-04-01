@@ -175,6 +175,15 @@ using Which5=std::optional<std::variant<Team_number,Event_code>>;
 
 FRC_API_DATA(Registrations_query,FRC_API_REGISTRATIONS_QUERY)
 
+#define FRC_API_DISTRICT_RANKINGS_QUERY(X)\
+	X(Season,season)\
+	X(std::optional<District_code>,district)\
+	X(std::optional<Team_number>,teamNumber)\
+	X(std::optional<int>,top)\
+	X(std::optional<int>,page)
+
+FRC_API_DATA(District_rankings,FRC_API_DISTRICT_RANKINGS_QUERY)
+
 #define FRC_API_QUERY_TYPES(X)\
 	X(Alliance_selection,std::optional<Alliances>)\
 	X(API_index,ApiIndex)\
@@ -189,7 +198,8 @@ FRC_API_DATA(Registrations_query,FRC_API_REGISTRATIONS_QUERY)
 	X(Event_listings,Events)\
 	X(District_listings,DistrictListings)\
 	X(Team_listings,TeamListings)\
-	X(Registrations_query,std::optional<Registrations>)
+	X(Registrations_query,std::optional<Registrations>)\
+	X(District_rankings,DistrictRankings)\
 
 using Query=std::variant<
 	Alliance_selection,
@@ -205,7 +215,8 @@ using Query=std::variant<
 	Event_listings,
 	District_listings,
 	Team_listings,
-	Registrations_query
+	Registrations_query,
+	District_rankings
 >;
 
 using URL=std::string;
@@ -216,6 +227,7 @@ std::string rand(const std::string*);
 unsigned rand(const unsigned*);
 int rand(const int*);
 bool rand(const bool*);
+double rand(const double*);
 
 template<typename T>
 std::optional<T> rand(const std::optional<T>*){

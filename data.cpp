@@ -69,6 +69,46 @@ Team_number decode(JSON_value in,const Team_number*){
 	return Team_number{decode(in,(int*)nullptr)};
 }
 
+Event_code::Event_code(String2 a):data(std::move(a)){}
+
+Event_code::Event_code(const char *s):data(s){}
+
+Event_code::operator String2()const{
+	return data;
+}
+
+Event_code example(Event_code const*){
+	nyi
+}
+
+Event_code rand(Event_code const*){
+	nyi
+}
+
+Event_code decode(JSON_value in,Event_code const*){
+	return Event_code{decode(in,(String2*)0)};
+}
+
+District_code::District_code(String2 a):data(std::move(a)){}
+
+District_code::District_code(const char* a):data(a){}
+
+District_code::operator String2()const{
+	return data;
+}
+
+District_code decode(JSON_value in,District_code const*){
+	return District_code{decode(in,(String2*)0)};
+}
+
+District_code rand(District_code const*){
+	nyi
+}
+
+District_code example(District_code const*){
+	nyi
+}
+
 #define PRINT_ITEM(A) if(a==decltype(a)::A) return o<<""#A;
 
 #define ITEM_LIST(A) NAME::A,

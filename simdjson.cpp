@@ -41,6 +41,8 @@ int decode(JSON_value a,int const*){
 			return a.get_int64();
 		case simdjson::dom::element_type::NULL_VALUE:
 			throw Decode_error{"int",as_string(a),"wrong type, got null"};
+		case simdjson::dom::element_type::DOUBLE:
+			throw Decode_error{"double",as_string(a),"wrong type, got double"};
 		default:
 			FRC_API_PRINT(a.type())
 			FRC_API_NYI

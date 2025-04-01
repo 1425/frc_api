@@ -28,7 +28,7 @@ double rand(const double*)FRC_API_NYI
 
 //start normal program logic
 
-static const int MAX_YEAR=2024;
+static const int MAX_YEAR=2025;
 
 Season::Season(int i1):i(i1){
 	if(i<2015 || i>MAX_YEAR){
@@ -223,6 +223,8 @@ constexpr T null1(T*){
 
 #define RETURN_IF_PRESENT(A,B) if(x.name==""#B) return;
 
+#define SET(A,B) i++;
+
 #define IMPL(NAME,ITEMS) \
 	std::ostream& operator<<(std::ostream& o,NAME const& a){\
 		(void)a; \
@@ -255,7 +257,7 @@ constexpr T null1(T*){
 		}\
 	}\
 	NAME decode(std::nullptr_t,NAME const*){\
-		FRC_API_NYI\
+		throw Decode_error(""#NAME,"",std::string{"empty"});\
 	}\
 
 IMPL(API_index,FRC_API_API_INDEX)
@@ -276,6 +278,7 @@ IMPL(Event_rankings,FRC_API_EVENT_RANKINGS)
 IMPL(District_listings,FRC_API_DISTRICT_LISTINGS_QUERY)
 IMPL(Team_listings,FRC_API_TEAM_LISTINGS)
 IMPL(Registrations_query,FRC_API_REGISTRATIONS_QUERY)
+IMPL(District_rankings,FRC_API_DISTRICT_RANKINGS_QUERY)
 
 //TODO: Move to data.cpp
 IMPL(Alliance_t,FRC_API_ALLIANCE)
@@ -318,6 +321,8 @@ IMPL(Response_details_2018,FRC_API_RESPONSE_DETAILS_2018)
 IMPL(Score_2022,FRC_API_SCORE_2022)
 IMPL(Response_details_2022,FRC_API_RESPONSE_DETAILS_2022)
 IMPL(Rankings,FRC_API_RANKINGS)
+IMPL(DistrictRankings,FRC_API_DISTRICTRANKINGS)
+IMPL(DistrictRankings_item,FRC_API_DISTRICTRANKINGS_ITEM)
 
 URL url(Alliance_selection const& a){
 	std::ostringstream ss;
@@ -526,6 +531,15 @@ URL url(Registrations_query const& a){
 		);
 	}
 	return ss.str();
+}
+
+URL url(District_rankings const& a){
+	URL_generator u;
+	u<<"https://frc-api.firstinspires.org/v3.0/"<<a.season<<"/rankings/district";
+	u.add("district",a.district);
+	u.add("top",a.top);
+	u.add("page",a.page);
+	return u.str();
 }
 
 template<typename A,typename ... B>

@@ -43,12 +43,53 @@ void print_lines(T const& t){
 	}
 }
 
+template<typename T>
+std::vector<T>& operator|=(std::vector<T>& a,T b){
+	a.push_back(b);
+	return a;
+}
+
+template<typename T>
+std::vector<T>& operator|=(std::vector<T>& a,std::vector<T> const& b){
+	for(auto const& x:b){
+		a|=x;
+	}
+	return a;
+}
+
 #define MAP(F,IN) mapf([&](auto a){ return F(a); },IN)
+
+template<typename T>
+auto sum(std::vector<T> const& a){
+	return std::accumulate(a.begin(),a.end(),T{});
+}
+
+template<typename T>
+auto count(std::vector<T> a){
+	std::map<T,unsigned> r;
+	for(auto elem:a){
+		r[elem]++;
+	}
+	return r;
+}
+
+auto options(Season const*){
+	std::vector<Season> r;
+	for(int i=2015;i<=2025;i++){
+		r|=Season{i};
+	}
+	return r;
+}
 
 template<typename Fetcher,typename T>
 auto run(Fetcher &fetcher,URL url,const T*){
 	auto g=fetcher.fetch(url);
-	//PRINT(g);
+	//FRC_API_PRINT(g.second.size());
+
+	if(g.second.empty()){
+		return decode(nullptr,(T*)nullptr);
+	}
+
 	//rapidjson::Document a;
 	//a.Parse(g.second.c_str());
 	simdjson::dom::parser parser;
@@ -132,6 +173,37 @@ struct Query_generator{
 template<typename T>
 auto code(T t){ return t.code; }
 
+auto rankings(Cached_fetcher &f,Season season){
+	std::vector<DistrictRankings_item> r;
+	auto q=District_rankings{season,std::nullopt,std::nullopt,std::nullopt,std::nullopt};
+	q.page=1;
+	while(1){
+		auto g=run(f,q);
+		r|=g.districtRanks;
+		if(g.districtRanks.empty()){
+			break;
+		}
+		(*q.page)++;
+	}
+	return r;
+}
+
+auto reversed(auto a){
+	std::reverse(a.begin(),a.end());
+	return a;
+}
+
+void try_rankings(Cached_fetcher &f){
+	for(auto season:reversed(options((Season*)0))){
+		auto g=rankings(f,season);
+		auto f1=filter([](auto x){ return x.adjustmentPoints; },g);
+		auto p=mapf([](auto x){ return x.adjustmentPoints; },f1);
+		std::cout<<season<<" "<<f1.size()<<"\t"<<count(p)<<"\n";
+		//print_lines(f1);
+	}
+	exit(0);
+}
+
 int demo(){
 	std::string key;
 	{
@@ -149,10 +221,14 @@ int demo(){
 		run1(f,q);
 	}*/
 
+	#if 0
 	{
 		auto g=run(f,API_index{});
 		FRC_API_PRINT(g);
 	}
+	#endif
+
+	//try_rankings(f);
 
 	std::vector<Season> years{
 		Season{2015},
